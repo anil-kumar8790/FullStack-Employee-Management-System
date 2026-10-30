@@ -202,3 +202,163 @@ Full Stack Developer | Angular | Node.js | Express.js | PostgreSQL
 
 ### 6. Settings Management
 ![Settings Management](docs/screenshots/admin-settings.png)
+
+
+## 🔗 API Documentation
+
+### Authentication APIs
+
+| Method | Endpoint | Description | Access |
+|---|---|---|---|
+| POST | `/register` | Register a new user | Public |
+| POST | `/login` | Authenticate user and generate JWT | Public |
+| POST | `/forgot-password` | Request password reset | Public |
+| POST | `/reset-password` | Reset user password | Public |
+| PUT | `/set-employee-password` | Set employee password | Admin |
+| POST | `/complete-employee-password-setup` | Complete employee password setup | Public |
+| PUT | `/change-password` | Change logged-in user's password | Authenticated |
+| GET | `/profile` | Retrieve logged-in user's profile | Authenticated |
+
+### Authentication and Authorization
+
+- JWT-based authentication.
+- Authentication middleware protects private endpoints.
+- Role middleware restricts employee password setup to Admin users.
+- Express Validator handles registration and login validation.
+- Validation errors are returned with HTTP 400 status.
+
+### Authentication Headers
+
+For protected endpoints, provide the JWT token:
+
+```http
+Authorization: Bearer <your_jwt_token>
+```
+
+### HTTP Status Codes
+
+- `200` – Successful request.
+- `400` – Validation error or invalid request.
+- `401` – Unauthorized request.
+- `403` – Forbidden access.
+- `500` – Internal server error.
+
+
+### Employee Management APIs
+
+| Method | Endpoint | Description | Access |
+|---|---|---|---|
+| GET | `/employees` | Retrieve all employees | Authenticated |
+| GET | `/employees/me` | Retrieve logged-in employee profile | Authenticated |
+| GET | `/employees/stats` | Retrieve employee status counts | Admin |
+| GET | `/employees/:id` | Retrieve employee by ID | Admin / Employee |
+| POST | `/employees` | Create a new employee | Admin |
+| PUT | `/employees/:id` | Update employee details | Admin |
+| DELETE | `/employees/:id` | Delete an employee | Admin |
+
+### Employee API Features
+
+- Employee listing with pagination.
+- Department-based filtering.
+- Sorting support.
+- Employee profile retrieval.
+- Employee status statistics.
+- Employee creation, updating, and deletion.
+- Request validation using Express Validator.
+- JWT authentication and role-based access control.
+
+
+### Department Management APIs
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/departments` | Retrieve all departments |
+| POST | `/departments` | Create a new department |
+| PUT | `/departments/:id` | Update department details |
+| DELETE | `/departments/:id` | Delete a department |
+
+### Department API Features
+
+- Retrieve all departments.
+- Create new departments.
+- Update existing department details.
+- Delete departments.
+
+## 🔗 REST API Documentation
+
+### Base URL
+
+```text
+http://localhost:5000/api
+```
+
+### Authentication APIs
+
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/auth/register` | Register a new user |
+| POST | `/auth/login` | Authenticate user |
+| POST | `/auth/forgot-password` | Request password reset |
+| POST | `/auth/reset-password` | Reset password |
+| PUT | `/auth/set-employee-password` | Admin sets employee password |
+| POST | `/auth/complete-employee-password-setup` | Complete employee password setup |
+| PUT | `/auth/change-password` | Change logged-in user's password |
+| GET | `/auth/profile` | Retrieve logged-in user's profile |
+
+### Employee Management APIs
+
+| Method | Endpoint | Description | Access |
+|---|---|---|---|
+| GET | `/employees` | Retrieve all employees | Authenticated |
+| GET | `/employees/me` | Retrieve logged-in employee profile | Authenticated |
+| GET | `/employees/stats` | Retrieve employee status counts | Admin |
+| GET | `/employees/:id` | Retrieve employee by ID | Admin / Employee |
+| POST | `/employees` | Create employee | Admin |
+| PUT | `/employees/:id` | Update employee | Admin |
+| DELETE | `/employees/:id` | Delete employee | Admin |
+
+### Department Management APIs
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/departments` | Retrieve all departments |
+| POST | `/departments` | Create department |
+| PUT | `/departments/:id` | Update department |
+| DELETE | `/departments/:id` | Delete department |
+
+### Security
+
+- JWT-based authentication.
+- Role-based authorization for employee management.
+- Express Validator for registration and login validation.
+- Request validation middleware.
+- Centralized error handling.
+
+### Backend Configuration
+
+- Backend framework: Express.js
+- Server port: 5000
+- Database: PostgreSQL
+- Frontend origin allowed by CORS: `http://localhost:4200`
+
+### Run the Backend
+
+```bash
+cd backend
+npm install
+npm start
+```
+
+### Run the Frontend
+
+```bash
+cd frontend/employee-frontend
+npm install
+ng serve
+```
+
+Open the application at:
+
+```text
+http://localhost:4200
+```
