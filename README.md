@@ -180,3 +180,25 @@ Full Stack Developer | Angular | Node.js | Express.js | PostgreSQL
 ---
 
 ⭐ If you find this project useful, consider giving the repository a star!
+
+
+
+## 📸 Application Screenshots
+
+### 1. Login Page
+![Login Page](docs/screenshots/login.png)
+
+### 2. Admin Dashboard
+![Admin Dashboard](docs/screenshots/admin-dashboard.png)
+
+### 3. Employee List
+![Employee List](docs/screenshots/admin-employee-list.png)
+
+### 4. Employee Profile
+![Employee Profile](docs/screenshots/admin-employee-profile.png)
+
+### 5. Department Management
+![Department Management](docs/screenshots/admin-departments.png)
+
+### 6. Settings Management
+![Settings Management](docs/screenshots/admin-settings.png)
