@@ -359,6 +359,17 @@ ng serve
 
 Open the application at:
 
-```text
 http://localhost:4200
-```
+
+
+## 🏗️ System Architecture
+
+The application follows a three-tier architecture:
+
+1. **Frontend:** Angular 18 handles user interfaces, routing, authentication guards and API communication.
+2. **Backend:** Node.js and Express.js provide REST APIs, business logic, validation and authorization.
+3. **Database:** PostgreSQL stores user, employee and department information.
+
+### Architecture Diagram
+
+![Employee Management System Architecture](docs/architecture.png)
