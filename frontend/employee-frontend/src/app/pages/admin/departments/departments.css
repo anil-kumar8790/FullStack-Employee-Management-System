@@ -1,0 +1,844 @@
+
+/* =========================================
+   DEPARTMENTS PAGE
+========================================= */
+
+:host {
+  display: block;
+  min-height: 100%;
+  color: #1e293b;
+}
+
+.departments-page {
+  min-height: calc(100vh - 72px);
+  padding: 28px;
+  background: #f5f7fb;
+  box-sizing: border-box;
+}
+
+/* =========================================
+   PAGE HEADER
+========================================= */
+
+.page-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+.page-heading h1 {
+  margin: 0 0 8px;
+  color: #172554;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.page-heading p,
+.section-heading p {
+  margin: 0;
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* Add Department Button */
+
+.add-department-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 9px;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.add-department-btn:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+
+.add-department-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.add-department-btn span {
+  font-size: 20px;
+  line-height: 1;
+}
+
+/* =========================================
+   SUCCESS MESSAGE
+========================================= */
+
+.success-message {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 14px 18px;
+  border: 1px solid #bbf7d0;
+  border-radius: 9px;
+  background: #f0fdf4;
+  color: #166534;
+  font-size: 14px;
+}
+
+/* =========================================
+   SUMMARY CARDS
+========================================= */
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+  min-height: 110px;
+  padding: 22px;
+  border: 1px solid #e8edf5;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 4px 15px rgb(15 23 42 / 4%);
+  box-sizing: border-box;
+}
+
+.stat-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  font-size: 23px;
+  font-weight: 700;
+}
+
+.total-card .stat-icon {
+  background: #e8efff;
+  color: #315ce8;
+}
+
+.active-card .stat-icon {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.inactive-card .stat-icon {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.department-card .stat-icon {
+  background: #f3e8ff;
+  color: #9333ea;
+}
+
+.stat-info {
+  min-width: 0;
+}
+
+.stat-info h2 {
+  margin: 0 0 7px;
+  color: #172554;
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.stat-info p {
+  margin: 0;
+  color: #64748b;
+  font-size: 13px;
+}
+
+/* =========================================
+   DEPARTMENT TABLE SECTION
+========================================= */
+
+.department-section {
+  overflow: hidden;
+  margin-bottom: 24px;
+  border: 1px solid #e8edf5;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 4px 15px rgb(15 23 42 / 4%);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 24px;
+  border-bottom: 1px solid #edf0f5;
+}
+
+.section-heading h2 {
+  margin: 0 0 6px;
+  color: #172554;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+/* Search Input */
+
+.search-input {
+  width: min(100%, 300px);
+  min-height: 42px;
+  padding: 11px 14px;
+  border: 1px solid #dbe2ee;
+  border-radius: 9px;
+  outline: none;
+  background: #ffffff;
+  color: #1e293b;
+  font-size: 14px;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.search-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgb(59 130 246 / 12%);
+}
+
+/* Table */
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+thead {
+  background: #f8fafc;
+}
+
+th {
+  padding: 16px 24px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+td {
+  padding: 20px 24px;
+  border-top: 1px solid #edf0f5;
+  color: #334155;
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+tbody tr {
+  transition: background 0.15s ease;
+}
+
+tbody tr:hover {
+  background: #fafcff;
+}
+
+.empty-state {
+  padding: 40px 24px;
+  color: #64748b;
+  text-align: center;
+  line-height: 1.6;
+}
+
+/* Department Details */
+
+.department-name {
+  color: #263653;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.department-description {
+  margin-top: 5px;
+  color: #7b8799;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* Employee Count */
+
+.employee-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  padding: 5px 9px;
+  border-radius: 7px;
+  background: #eff4ff;
+  color: #2457d6;
+  font-size: 13px;
+  font-weight: 600;
+  box-sizing: border-box;
+}
+
+/* Status Badges */
+
+.status-badge {
+  display: inline-block;
+  padding: 6px 11px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status-active {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-inactive {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* Action Buttons */
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.edit-btn {
+  padding: 7px 14px;
+  border: 1px solid #cbdafe;
+  border-radius: 7px;
+  background: #eff4ff;
+  color: #2457d6;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.edit-btn:hover:not(:disabled) {
+  background: #dfe9ff;
+}
+
+.edit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* =========================================
+   ERROR MESSAGES
+========================================= */
+
+.error-message {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 18px 24px;
+  padding: 12px 16px;
+  border: 1px solid #fecaca;
+  border-radius: 9px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 14px;
+}
+
+.error-message button {
+  flex-shrink: 0;
+  padding: 7px 12px;
+  border: 1px solid #fecaca;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #b91c1c;
+  cursor: pointer;
+}
+
+.error-message button:hover {
+  background: #fee2e2;
+}
+
+/* =========================================
+   ADD / EDIT DEPARTMENT MODAL
+========================================= */
+
+/* Dark background behind the popup */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow-y: auto;
+  background: rgb(15 23 42 / 58%);
+  backdrop-filter: blur(3px);
+  box-sizing: border-box;
+  animation: overlay-fade-in 0.18s ease-out;
+}
+
+/* Popup container */
+
+.department-modal {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 760px;
+  max-height: calc(100vh - 48px);
+  overflow: hidden;
+  border: 1px solid rgb(226 232 240 / 80%);
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 24px 70px rgb(0 0 0 / 25%);
+  animation: department-modal-enter 0.2s ease-out;
+}
+
+/* Popup Header */
+
+.modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  flex-shrink: 0;
+  padding: 24px 28px;
+  border-bottom: 1px solid #edf0f5;
+  background: #ffffff;
+}
+
+.modal-header h2 {
+  margin: 0;
+  color: #263653;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.modal-header p {
+  margin: 8px 0 0;
+  color: #718096;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Close Button */
+
+.modal-close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  background: #f3f5f9;
+  color: #52627a;
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.modal-close-btn:hover:not(:disabled) {
+  background: #e7ebf3;
+  color: #172554;
+}
+
+.modal-close-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Popup Form */
+
+.department-modal form {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Scrollable form content */
+
+.modal-body {
+  min-height: 0;
+  padding: 24px 28px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* Form Grid */
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px 24px;
+  margin-top: 0;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+/* Labels */
+
+.form-group label {
+  color: #263653;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Inputs, Dropdowns and Textarea */
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  padding: 12px 14px;
+  border: 1px solid #dbe3ef;
+  border-radius: 9px;
+  outline: none;
+  background: #ffffff;
+  color: #243653;
+  font-family: inherit;
+  font-size: 14px;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group input,
+.form-group select {
+  min-height: 46px;
+}
+
+.form-group textarea {
+  min-height: 100px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #9aa6b8;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #2864ed;
+  box-shadow: 0 0 0 3px rgb(40 100 237 / 12%);
+}
+
+.form-group input:disabled,
+.form-group select:disabled,
+.form-group textarea:disabled {
+  background: #f8fafc;
+  color: #94a3b8;
+  cursor: not-allowed;
+}
+
+/* Validation and Helper Messages */
+
+.field-error {
+  color: #dc2626;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.field-hint {
+  color: #718096;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* Popup Footer */
+
+.modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-shrink: 0;
+  gap: 12px;
+  padding: 20px 28px;
+  border-top: 1px solid #edf0f5;
+  background: #fafbfe;
+}
+
+/* Save / Update Button */
+
+.save-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 150px;
+  min-height: 44px;
+  padding: 0 22px;
+  border: none;
+  border-radius: 9px;
+  background: #2864ed;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.save-btn:hover:not(:disabled) {
+  background: #1e50cc;
+  transform: translateY(-1px);
+}
+
+.save-btn:disabled {
+  background: #9bb6f7;
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+
+/* Cancel Button */
+
+.cancel-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 22px;
+  border: 1px solid #dbe3ef;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #52627a;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.cancel-btn:hover:not(:disabled) {
+  border-color: #b9c6d8;
+  background: #f5f7fb;
+}
+
+.cancel-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* =========================================
+   MODAL ANIMATIONS
+========================================= */
+
+@keyframes overlay-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes department-modal-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* =========================================
+   RESPONSIVE TABLET LAYOUT
+========================================= */
+
+@media (max-width: 1100px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .stat-card {
+    padding: 20px;
+  }
+}
+
+/* =========================================
+   RESPONSIVE MOBILE LAYOUT
+========================================= */
+
+@media (max-width: 650px) {
+  .departments-page {
+    padding: 18px 14px;
+  }
+
+  .page-heading,
+  .section-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .page-heading h1 {
+    font-size: 24px;
+  }
+
+  .add-department-btn {
+    align-self: flex-start;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .stat-card {
+    min-height: 90px;
+    padding: 18px;
+  }
+
+  .section-heading {
+    padding: 18px;
+  }
+
+  .search-input {
+    width: 100%;
+  }
+
+  th,
+  td {
+    padding: 14px 16px;
+  }
+
+  .modal-overlay {
+    align-items: center;
+    padding: 12px;
+  }
+
+  .department-modal {
+    max-height: calc(100vh - 24px);
+    border-radius: 12px;
+  }
+
+  .modal-header {
+    padding: 20px;
+  }
+
+  .modal-header h2 {
+    font-size: 19px;
+  }
+
+  .modal-body {
+    padding: 20px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .form-group.full-width {
+    grid-column: auto;
+  }
+
+  .modal-footer {
+    gap: 10px;
+    padding: 16px 20px;
+  }
+
+  .modal-footer .save-btn,
+  .modal-footer .cancel-btn {
+    flex: 1;
+    min-width: 0;
+    padding: 0 12px;
+  }
+
+  .error-message {
+    align-items: flex-start;
+    margin: 16px;
+  }
+}
+
+/* Short screens: allow the modal content to scroll */
+
+@media (max-height: 650px) {
+  .modal-overlay {
+    align-items: flex-start;
+  }
+
+  .department-modal {
+    margin: auto 0;
+    max-height: calc(100vh - 24px);
+  }
+}
+
+/* Respect reduced motion preferences */
+
+@media (prefers-reduced-motion: reduce) {
+  .modal-overlay,
+  .department-modal {
+    animation: none;
+  }
+
+  .save-btn,
+  .cancel-btn,
+  .edit-btn,
+  .add-department-btn {
+    transition: none;
+  }
+}
+
+/* Delete Department Button */
+
+.delete-btn {
+  padding: 7px 14px;
+  border: 1px solid #fecaca;
+  border-radius: 7px;
+  background: #fef2f2;
+  color: #dc2626;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.delete-btn:hover:not(:disabled) {
+  border-color: #fca5a5;
+  background: #fee2e2;
+}
+
+.delete-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

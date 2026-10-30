@@ -1,0 +1,21 @@
+# Node dependencies
+**/node_modules/
+
+# Environment files
+**/.env
+**/.env.*
+!**/.env.example
+
+# Build output
+**/dist/
+**/.angular/
+**/coverage/
+
+# IDE settings
+.idea/
+.vscode/
+**/.vscode/mcp.json
+
+# System files
+.DS_Store
+Thumbs.db

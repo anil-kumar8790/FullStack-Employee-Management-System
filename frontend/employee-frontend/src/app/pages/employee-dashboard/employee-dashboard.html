@@ -1,0 +1,376 @@
+<div class="dashboard-layout" [class.sidebar-collapsed]="sidebarCollapsed" [class.mobile-menu-open]="mobileMenuOpen">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">EMS</div>
+      <div class="brand-text">
+        <h2>EMS</h2>
+        <p>Employee Management System</p>
+      </div>
+    </div>
+
+
+    <nav class="sidebar-nav">
+      <a routerLink="/employee-dashboard" class="nav-link" [class.active]="activeTab === 'dashboard'"
+        (click)="setActiveTab('dashboard'); mobileMenuOpen = false">
+        <span class="nav-icon">⌂</span>
+        <span class="nav-label">Dashboard</span>
+      </a>
+
+      <button type="button" class="nav-link" [class.active]="activeTab === 'profile'" (click)="viewProfile()">
+        <span class="nav-icon">♙</span>
+        <span class="nav-label">My Profile</span>
+      </button>
+
+      <a routerLink="/change-password" class="nav-link" [class.active]="activeTab === 'change-password'"
+        (click)="setActiveTab('change-password'); mobileMenuOpen = false">
+        <span class="nav-icon">🔒</span>
+        <span class="nav-label">Change Password</span>
+      </a>
+
+      <button type="button" class="nav-link logout-link" (click)="logout()">
+        <span class="nav-icon">⇥</span>
+        <span class="nav-label">Logout</span>
+      </button>
+    </nav>
+
+
+    <div class="sidebar-footer">
+      <span class="online-dot"></span>
+      <span class="nav-label">Employee Portal</span>
+    </div>
+  </aside>
+
+  <!-- Main area -->
+  <main class="main-content">
+    <!-- Top header -->
+    <header class="top-header">
+      <button type="button" class="icon-button menu-button" aria-label="Toggle sidebar" (click)="toggleSidebar()">
+        ☰
+      </button>
+
+      <button type="button" class="icon-button mobile-menu-button" aria-label="Open menu" (click)="toggleMobileMenu()">
+        ☰
+      </button>
+
+      <!-- Search -->
+      <div class="search-container">
+        <span class="search-icon">⌕</span>
+
+        <input type="search" class="search-input" placeholder="Search your profile..."
+          aria-label="Search employee profile" [value]="searchQuery" (input)="onSearch($any($event.target).value)"
+          (keydown.escape)="onSearch('')" />
+
+        <button *ngIf="searchQuery" type="button" class="clear-search" aria-label="Clear search" (click)="onSearch('')">
+          ×
+        </button>
+
+        <div class="search-results" *ngIf="showSearchResults">
+          <ng-container *ngIf="searchMatches && employee">
+            <button type="button" class="search-result-item" (click)="viewProfile(); onSearch('')">
+              <span class="result-avatar">♙</span>
+              <span>
+                <strong>{{ employee.name }}</strong>
+                <small>
+                  {{ employee.department }} · ID {{ employee.id }}
+                </small>
+              </span>
+            </button>
+          </ng-container>
+
+          <p class="no-search-results" *ngIf="!searchMatches">
+            No matching profile information found.
+          </p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Notifications -->
+        <div class="dropdown-wrapper">
+          <button type="button" class="icon-button notification-button" aria-label="Notifications"
+            [attr.aria-expanded]="notificationsOpen" (click)="toggleNotifications()">
+            ♧
+            <span class="notification-dot"></span>
+          </button>
+
+          <div class="dropdown-panel notification-panel" *ngIf="notificationsOpen">
+            <h3>Notifications</h3>
+            <div class="notification-item">
+              <span class="notification-symbol">✓</span>
+              <div>
+                <strong>Profile portal</strong>
+                <p>Your employee dashboard is ready.</p>
+              </div>
+            </div>
+            <p class="notification-note">
+              These are local interface notifications, not server alerts.
+            </p>
+          </div>
+        </div>
+
+        <!-- Employee dropdown -->
+        <div class="dropdown-wrapper employee-dropdown">
+          <button type="button" class="employee-menu-trigger" [attr.aria-expanded]="employeeMenuOpen"
+            (click)="toggleEmployeeMenu()">
+            <span class="user-avatar">♙</span>
+
+            <span class="header-user-text">
+              <strong>{{ employee?.name || 'Employee' }}</strong>
+              <small>{{ currentRole }}</small>
+            </span>
+
+            <span class="dropdown-arrow">
+              {{ employeeMenuOpen ? '⌃' : '⌄' }}
+            </span>
+          </button>
+
+          <div class="dropdown-panel employee-menu-panel" *ngIf="employeeMenuOpen">
+            <div class="dropdown-user-summary">
+              <strong>{{ employee?.name || 'Employee' }}</strong>
+              <small>{{ employee?.email || '' }}</small>
+            </div>
+
+            <button type="button" class="dropdown-action" (click)="navigateToProfile()">
+              <span>♙</span> View profile
+            </button>
+
+            <button type="button" class="dropdown-action logout-action" (click)="logout()">
+              <span>⇥</span> Logout
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Page heading -->
+    <div class="page-content">
+      <div class="page-heading">
+        <div>
+          <h1>Welcome, {{ employee?.name || 'Employee' }}!</h1>
+          <p>Here is your profile information.</p>
+        </div>
+
+        <div class="breadcrumb">
+          <span>Dashboard</span>
+          <span>›</span>
+          <strong>Employee Profile</strong>
+        </div>
+      </div>
+
+      <!-- Loading -->
+      <div class="state-card" *ngIf="loading">
+        <span class="loading-spinner"></span>
+        <p>Loading your profile...</p>
+      </div>
+
+      <!-- Error -->
+      <div class="state-card error-state" *ngIf="!loading && errorMessage">
+        <h3>Unable to load your profile</h3>
+        <p>{{ errorMessage }}</p>
+        <button type="button" class="primary-button" (click)="loadEmployeeProfile()">
+          Try again
+        </button>
+      </div>
+
+      <!-- Profile dashboard -->
+      <ng-container *ngIf="!loading && !errorMessage && employee">
+
+        <!-- Employee hero -->
+        <section class="profile-hero">
+          <div class="profile-avatar-large">
+            {{ employee.name.charAt(0).toUpperCase() }}
+          </div>
+
+          <div class="hero-details">
+            <h2>{{ employee.name }}</h2>
+
+            <div class="hero-meta">
+              <span>{{ currentRole }}</span>
+              <span class="role-badge">
+                <span class="status-dot"></span>
+                Profile loaded
+              </span>
+            </div>
+
+            <p>
+              Welcome to your employee portal. You can view your
+              registered profile information below.
+            </p>
+          </div>
+
+          <button type="button" class="view-profile-button" (click)="viewProfile()">
+            <span>✎</span> View Profile
+          </button>
+        </section>
+
+        <!-- Summary cards -->
+        <section class="summary-grid">
+          <article class="summary-card">
+            <div class="summary-icon purple">♙</div>
+            <div class="summary-info">
+              <p>Employee ID</p>
+              <h3>{{ employee.id }}</h3>
+            </div>
+          </article>
+
+          <article class="summary-card">
+            <div class="summary-icon blue">✉</div>
+            <div class="summary-info">
+              <p>Email Address</p>
+              <h3 class="email-value">{{ employee.email }}</h3>
+            </div>
+          </article>
+
+          <article class="summary-card">
+            <div class="summary-icon green">♧</div>
+            <div class="summary-info">
+              <p>Department</p>
+              <h3>{{ employee.department }}</h3>
+            </div>
+          </article>
+
+          <article class="summary-card">
+            <div class="summary-icon red">▦</div>
+            <div class="summary-info">
+              <p>Joining Date</p>
+              <h3>
+                {{
+                employee.joining_date
+                ? (employee.joining_date | date:'dd MMM yyyy')
+                : 'Not provided'
+                }}
+              </h3>
+            </div>
+          </article>
+        </section>
+
+        <!-- Details -->
+        <section class="details-grid" #profileSection>
+          <article class="content-card salary-card">
+            <div class="card-heading">
+              <span class="heading-icon salary-icon">₹</span>
+              <h2>Salary Information</h2>
+            </div>
+
+            <div class="salary-box">
+              <p>Monthly Salary</p>
+              <h3>
+                {{
+                employee.salary
+                | currency:'INR':'symbol':'1.2-2':'en-IN'
+                }}
+              </h3>
+            </div>
+
+            <p class="data-note">
+              Salary displayed from your employee record.
+            </p>
+          </article>
+
+          <article class="content-card contact-card">
+            <div class="card-heading">
+              <span class="heading-icon contact-icon">☎</span>
+              <h2>Contact Information</h2>
+            </div>
+
+            <div class="contact-row">
+              <span class="contact-label">
+                <span>☎</span> Phone
+              </span>
+              <strong>{{ employee.phone || 'Not provided' }}</strong>
+            </div>
+
+            <div class="contact-row">
+              <span class="contact-label">
+                <span>✉</span> Email
+              </span>
+              <strong class="break-word">{{ employee.email }}</strong>
+            </div>
+
+            <div class="contact-row">
+              <span class="contact-label">
+                <span>▦</span> Joining Date
+              </span>
+              <strong>
+                {{
+                employee.joining_date
+                ? (employee.joining_date | date:'dd MMM yyyy')
+                : 'Not provided'
+                }}
+              </strong>
+            </div>
+          </article>
+        </section>
+
+        <!-- Full profile -->
+        <section class="content-card full-profile-card">
+          <div class="card-heading">
+            <span class="heading-icon profile-icon">♙</span>
+            <h2>Employee Profile Details</h2>
+          </div>
+
+          <div class="profile-detail-grid">
+            <div class="profile-detail-item">
+              <span>Employee ID</span>
+              <strong>{{ employee.id }}</strong>
+            </div>
+
+            <div class="profile-detail-item">
+              <span>Full Name</span>
+              <strong>{{ employee.name }}</strong>
+            </div>
+
+            <div class="profile-detail-item">
+              <span>Email Address</span>
+              <strong class="break-word">{{ employee.email }}</strong>
+            </div>
+
+            <div class="profile-detail-item">
+              <span>Department</span>
+              <strong>{{ employee.department }}</strong>
+            </div>
+
+            <div class="profile-detail-item">
+              <span>Role</span>
+              <strong>{{ currentRole }}</strong>
+            </div>
+
+            <div class="profile-detail-item">
+              <span>Phone Number</span>
+              <strong>{{ employee.phone || 'Not provided' }}</strong>
+            </div>
+
+            <div class="profile-detail-item">
+              <span>Joining Date</span>
+              <strong>
+                {{
+                employee.joining_date
+                ? (employee.joining_date | date:'dd MMM yyyy')
+                : 'Not provided'
+                }}
+              </strong>
+            </div>
+
+            <div class="profile-detail-item">
+              <span>Monthly Salary</span>
+              <strong>
+                {{
+                employee.salary
+                | currency:'INR':'symbol':'1.2-2':'en-IN'
+                }}
+              </strong>
+            </div>
+          </div>
+        </section>
+
+        <footer class="page-footer">
+          Employee Management System · Employee Portal
+        </footer>
+      </ng-container>
+    </div>
+  </main>
+
+  <!-- Mobile overlay -->
+  <button *ngIf="mobileMenuOpen" type="button" class="mobile-overlay" aria-label="Close navigation menu"
+    (click)="mobileMenuOpen = false"></button>
+</div>

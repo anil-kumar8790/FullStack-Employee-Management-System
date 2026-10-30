@@ -1,0 +1,169 @@
+
+<div class="container mt-4">
+  <h2 class="mb-4">Employee Management</h2>
+
+  <!-- Search -->
+  <div class="row g-2 mb-3">
+    <div class="col-md-6">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Search by employee name, email or ID"
+        [(ngModel)]="searchTerm"
+        (keyup.enter)="searchEmployees()"
+        aria-label="Search employees"
+      />
+    </div>
+
+    <div class="col-auto">
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="searchEmployees()"
+        [disabled]="loading"
+      >
+        Search
+      </button>
+    </div>
+
+    <div class="col-auto">
+      <button
+        type="button"
+        class="btn btn-secondary"
+        (click)="clearSearch()"
+        [disabled]="loading"
+      >
+        Clear
+      </button>
+    </div>
+  </div>
+
+  <!-- Employee Count -->
+  <p class="text-muted mb-3">
+    Total employees: {{ totalEmployees }}
+  </p>
+
+  <!-- Success -->
+  @if (successMessage) {
+    <div class="alert alert-success" role="alert">
+      {{ successMessage }}
+    </div>
+  }
+
+  <!-- Loading -->
+  @if (loading) {
+    <p>Loading employees...</p>
+  }
+
+  <!-- Error -->
+  @if (errorMessage) {
+    <div class="alert alert-danger" role="alert">
+      {{ errorMessage }}
+
+      <button
+        type="button"
+        class="btn btn-sm btn-outline-danger ms-2"
+        (click)="loadEmployees()"
+      >
+        Retry
+      </button>
+    </div>
+  }
+
+  <!-- Employee Table -->
+  @if (!loading && !errorMessage) {
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped table-hover">
+        <thead class="table-dark">
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Department</th>
+            <th>Salary</th>
+            <th>Phone</th>
+            <th>Joining Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (employee of employees; track employee.id) {
+            <tr>
+              <td>{{ employee.id }}</td>
+              <td>{{ employee.name }}</td>
+              <td>{{ employee.email }}</td>
+              <td>{{ employee.department }}</td>
+              <td>{{ employee.salary }}</td>
+              <td>{{ employee.phone || '-' }}</td>
+              <td>
+                {{
+                  employee.joining_date
+                    ? (employee.joining_date | date:'dd-MM-yyyy')
+                    : '-'
+                }}
+              </td>
+              <td>{{ employee.status || '-' }}</td>
+
+              <td class="text-nowrap">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-primary me-2"
+                  (click)="editEmployee(employee)"
+                  [disabled]="loading"
+                >
+                  Edit
+                </button>
+
+                <button
+                  type="button"
+                  class="btn btn-sm btn-danger"
+                  (click)="deleteEmployee(employee.id)"
+                  [disabled]="loading"
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td class="text-center" colspan="9">
+                No employees found
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div
+      class="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-3 mb-4"
+    >
+      <span class="text-muted">
+        Page {{ currentPage }} of {{ totalPages }}
+      </span>
+
+      <div class="btn-group" role="group" aria-label="Employee pagination">
+        <button
+          type="button"
+          class="btn btn-outline-primary"
+          (click)="previousPage()"
+          [disabled]="currentPage <= 1 || loading"
+        >
+          Previous
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-outline-primary"
+          (click)="nextPage()"
+          [disabled]="currentPage >= totalPages || loading || totalPages === 0"
+        >
+          Next
+        </button>
+      </div>
+    </div>
+  }
+</div>

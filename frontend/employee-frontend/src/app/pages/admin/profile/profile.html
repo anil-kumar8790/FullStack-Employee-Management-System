@@ -1,0 +1,146 @@
+<div class="profile-page">
+  <!-- Page heading -->
+  <header class="page-heading">
+    <div>
+      <h1>My Profile</h1>
+      <p>View and manage your account information.</p>
+    </div>
+
+    <div class="breadcrumb">
+      <span>Home</span>
+      <span class="breadcrumb-arrow">›</span>
+      <strong>My Profile</strong>
+    </div>
+  </header>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="state-card">
+    <div class="spinner"></div>
+    <p>Loading your profile...</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="errorMessage && !loading" class="error-card">
+    <p>{{ errorMessage }}</p>
+    <button type="button" class="primary-button" (click)="loadProfile()">
+      Try Again
+    </button>
+  </div>
+
+  <!-- Profile content -->
+  <ng-container *ngIf="profile && !loading">
+
+    <!-- Profile banner -->
+    <section class="profile-banner">
+      <div class="profile-identity">
+        <div class="avatar-wrapper">
+          <div class="avatar">{{ initials }}</div>
+          <span class="avatar-status" title="Signed in"></span>
+        </div>
+
+        <div class="identity-details">
+          <h2>{{ profile.name }}</h2>
+          <p>{{ profile.email }}</p>
+
+          <span class="role-badge">
+            <span class="crown-icon">♛</span>
+            {{ profile.role }}
+          </span>
+        </div>
+      </div>
+
+      <div class="banner-stats">
+        <div class="banner-stat">
+          <div class="stat-icon blue-icon">#</div>
+          <div>
+            <span>User ID</span>
+            <strong>#{{ profile.id }}</strong>
+          </div>
+        </div>
+
+        <div class="banner-stat">
+          <div class="stat-icon green-icon">✓</div>
+          <div>
+            <span>Account Role</span>
+            <strong>{{ profile.role }}</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Information cards -->
+    <div class="profile-grid">
+
+      <!-- Personal information -->
+      <section class="content-card" id="personal-information">
+        <div class="card-heading">
+          <div class="card-heading-icon">♙</div>
+
+          <div>
+            <h3>Personal Information</h3>
+            <p>Your basic personal details</p>
+          </div>
+        </div>
+
+        <div class="detail-list">
+          <div class="detail-row">
+            <div class="detail-icon">♙</div>
+            <span class="detail-label">Full Name</span>
+            <strong>{{ profile.name }}</strong>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-icon">@</div>
+            <span class="detail-label">Email Address</span>
+            <strong class="break-text">{{ profile.email }}</strong>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-icon">♧</div>
+            <span class="detail-label">Role</span>
+            <strong>
+              <span class="role-badge small-badge">
+                {{ profile.role }}
+              </span>
+            </strong>
+          </div>
+        </div>
+      </section>
+
+      <!-- Account details -->
+      <section class="content-card" id="account-details">
+        <div class="card-heading">
+          <div class="card-heading-icon document-icon">▤</div>
+
+          <div>
+            <h3>Account Details</h3>
+            <p>Your account identification</p>
+          </div>
+        </div>
+
+        <div class="detail-list">
+          <div class="detail-row">
+            <div class="detail-icon">#</div>
+            <span class="detail-label">User ID</span>
+            <strong>{{ profile.id }}</strong>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-icon">♙</div>
+            <span class="detail-label">Account Role</span>
+            <strong>{{ profile.role }}</strong>
+          </div>
+
+          <div class="detail-row">
+            <div class="detail-icon">@</div>
+            <span class="detail-label">Registered Email</span>
+            <strong class="break-text">{{ profile.email }}</strong>
+          </div>
+        </div>
+      </section>
+
+      
+    </div>
+  </ng-container>
+</div>

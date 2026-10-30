@@ -1,0 +1,391 @@
+
+<div class="departments-page">
+
+  <!-- Page Header -->
+  <div class="page-heading">
+    <div>
+      <h1>Departments</h1>
+      <p>Manage your organization's departments and their information.</p>
+    </div>
+
+    <button
+      type="button"
+      class="add-department-btn"
+      (click)="showAddForm ? cancelAddForm() : openAddForm()"
+      [disabled]="saving"
+    >
+      <span>+</span>
+      {{ showAddForm ? 'Cancel' : 'Add Department' }}
+    </button>
+  </div>
+
+  <!-- Success Message -->
+  @if (successMessage) {
+    <div class="success-message" role="status">
+      {{ successMessage }}
+    </div>
+  }
+
+  <!-- Department Summary Cards -->
+  <div class="stats-grid">
+
+    <div class="stat-card total-card">
+      <div class="stat-icon">▦</div>
+      <div class="stat-info">
+        <h2>{{ loading ? '...' : totalDepartments }}</h2>
+        <p>Total Departments</p>
+      </div>
+    </div>
+
+    <div class="stat-card active-card">
+      <div class="stat-icon">✓</div>
+      <div class="stat-info">
+        <h2>{{ loading ? '...' : activeDepartments }}</h2>
+        <p>Active Departments</p>
+      </div>
+    </div>
+
+    <div class="stat-card inactive-card">
+      <div class="stat-icon">—</div>
+      <div class="stat-info">
+        <h2>{{ loading ? '...' : inactiveDepartments }}</h2>
+        <p>Inactive Departments</p>
+      </div>
+    </div>
+
+    <div class="stat-card department-card">
+      <div class="stat-icon">♟</div>
+      <div class="stat-info">
+        <h2>{{ loading ? '...' : totalEmployees }}</h2>
+        <p>Total Employees</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Department List -->
+  <section class="department-section">
+
+    <!-- Table Heading and Search -->
+    <div class="section-heading">
+      <div>
+        <h2>All Departments</h2>
+        <p>View and manage department details.</p>
+      </div>
+
+      <input
+        type="search"
+        class="search-input"
+        placeholder="Search by department or manager..."
+        [(ngModel)]="searchText"
+        aria-label="Search departments"
+      />
+    </div>
+
+    <!-- Loading Error -->
+    @if (errorMessage) {
+      <div class="error-message" role="alert">
+        {{ errorMessage }}
+
+        <button
+          type="button"
+          (click)="loadDepartments()"
+        >
+          Retry
+        </button>
+      </div>
+    }
+
+    <!-- Departments Table -->
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Department</th>
+            <th>Department Head</th>
+            <th>Employees</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          @if (loading) {
+            <tr>
+              <td colspan="5" class="empty-state">
+                Loading departments...
+              </td>
+            </tr>
+          } @else if (!errorMessage && filteredDepartments.length === 0) {
+            <tr>
+              <td colspan="5" class="empty-state">
+                {{
+                  searchText
+                    ? 'No departments match your search.'
+                    : 'No departments found. Add a department to get started.'
+                }}
+              </td>
+            </tr>
+          } @else {
+            @for (
+              department of filteredDepartments;
+              track department.id
+            ) {
+              <tr>
+
+                <!-- Department Details -->
+                <td>
+                  <div class="department-name">
+                    {{ department.name }}
+                  </div>
+
+                  <div class="department-description">
+                    {{ department.description || 'No description' }}
+                  </div>
+                </td>
+
+                <!-- Department Head -->
+                <td>
+                  {{ department.manager_name || 'Not assigned' }}
+                </td>
+
+                <!-- Employee Count -->
+                <td>
+                  <span class="employee-count">
+                    {{ department.employee_count }}
+                  </span>
+                </td>
+
+                <!-- Department Status -->
+                <td>
+                  <span
+                    class="status-badge"
+                    [class.status-active]="department.status === 'Active'"
+                    [class.status-inactive]="department.status === 'Inactive'"
+                  >
+                    {{ department.status }}
+                  </span>
+                </td>
+
+                <!-- Actions -->
+                <!-- Actions -->
+<td>
+  <div class="action-buttons">
+    <button
+      type="button"
+      class="edit-btn"
+      (click)="editDepartment(department)"
+      [disabled]="saving || deletingDepartmentId !== null"
+      aria-label="Edit department"
+    >
+      Edit
+    </button>
+
+    <button
+      type="button"
+      class="delete-btn"
+      (click)="confirmDeleteDepartment(department)"
+      [disabled]="saving || deletingDepartmentId !== null"
+      aria-label="Delete department"
+    >
+      Delete
+    </button>
+  </div>
+</td>
+
+              </tr>
+            }
+          }
+
+        </tbody>
+      </table>
+    </div>
+
+  </section>
+
+  <!-- Add / Edit Department Popup -->
+  @if (showAddForm) {
+    <div
+      class="modal-overlay"
+      (click)="cancelAddForm()"
+    >
+      <section
+        class="department-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="departmentModalTitle"
+        (click)="$event.stopPropagation()"
+      >
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <div>
+            <h2 id="departmentModalTitle">
+              {{
+                editingDepartmentId !== null
+                  ? 'Edit Department'
+                  : 'Add New Department'
+              }}
+            </h2>
+
+            <p>
+              {{
+                editingDepartmentId !== null
+                  ? 'Update the department information below.'
+                  : 'Enter the details to create a new department.'
+              }}
+            </p>
+          </div>
+
+          <button
+            type="button"
+            class="modal-close-btn"
+            aria-label="Close dialog"
+            (click)="cancelAddForm()"
+            [disabled]="saving"
+          >
+            &times;
+          </button>
+        </div>
+
+        <!-- Department Form -->
+        <form
+          #departmentForm="ngForm"
+          (ngSubmit)="addDepartment()"
+        >
+
+          <div class="modal-body">
+            <div class="form-grid">
+
+              <!-- Department Name -->
+              <div class="form-group">
+                <label for="departmentName">
+                  Department Name *
+                </label>
+
+                <input
+                  id="departmentName"
+                  type="text"
+                  name="name"
+                  [(ngModel)]="newDepartment.name"
+                  placeholder="e.g. Human Resources"
+                  required
+                  maxlength="100"
+                  #nameField="ngModel"
+                />
+
+                @if (nameField.invalid && nameField.touched) {
+                  <small class="field-error">
+                    Department name is required.
+                  </small>
+                }
+              </div>
+
+              <!-- Department Head -->
+              <div class="form-group">
+                <label for="departmentManager">
+                  Department Head
+                </label>
+
+                <select
+                  id="departmentManager"
+                  name="managerId"
+                  [(ngModel)]="newDepartment.managerId"
+                >
+                  <option [ngValue]="null">
+                    Not assigned
+                  </option>
+
+                  @for (employee of employees; track employee.id) {
+                    <option [ngValue]="employee.id">
+                      {{ employee.name }} (ID: {{ employee.id }})
+                    </option>
+                  }
+                </select>
+
+                @if (employeeErrorMessage) {
+                  <small class="field-error">
+                    {{ employeeErrorMessage }}
+                  </small>
+                }
+              </div>
+
+              <!-- Description -->
+              <div class="form-group full-width">
+                <label for="departmentDescription">
+                  Description
+                </label>
+
+                <textarea
+                  id="departmentDescription"
+                  name="description"
+                  [(ngModel)]="newDepartment.description"
+                  placeholder="Describe the department's responsibilities"
+                  rows="3"
+                ></textarea>
+              </div>
+
+              <!-- Status -->
+              <div class="form-group">
+                <label for="departmentStatus">
+                  Status
+                </label>
+
+                <select
+                  id="departmentStatus"
+                  name="status"
+                  [(ngModel)]="newDepartment.status"
+                  required
+                >
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                </select>
+              </div>
+
+            </div>
+
+            <!-- Form Error -->
+            @if (formErrorMessage) {
+              <div class="error-message" role="alert">
+                {{ formErrorMessage }}
+              </div>
+            }
+          </div>
+
+          <!-- Modal Footer -->
+          <div class="modal-footer">
+
+            <button
+              type="button"
+              class="cancel-btn"
+              (click)="cancelAddForm()"
+              [disabled]="saving"
+            >
+              Cancel
+            </button>
+
+            <button
+              type="submit"
+              class="save-btn"
+              [disabled]="saving || departmentForm.invalid"
+            >
+              {{
+                saving
+                  ? 'Saving...'
+                  : (
+                      editingDepartmentId !== null
+                        ? 'Update Department'
+                        : 'Save Department'
+                    )
+              }}
+            </button>
+
+          </div>
+
+        </form>
+      </section>
+    </div>
+  }
+
+</div>

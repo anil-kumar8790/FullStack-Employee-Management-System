@@ -1,0 +1,21 @@
+.login-card{
+    width: 500px;
+    max-width: 100%;
+}
+
+/* .login-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+} */
+
+
+.error-message {
+  color: #dc2626;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  padding: 10px 12px;
+  margin: 12px 0;
+  border-radius: 6px;
+  font-size: 14px;
+}

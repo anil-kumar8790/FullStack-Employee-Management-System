@@ -1,0 +1,171 @@
+
+<div class="modal-backdrop" (click)="closeModal()">
+
+  <div
+    class="add-employee-container"
+    (click)="$event.stopPropagation()"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="addEmployeeTitle">
+
+    <!-- Modal Header -->
+    <div class="modal-header">
+
+      <div>
+        <h2 id="addEmployeeTitle">Add Employee</h2>
+        <p>Enter the employee details below.</p>
+      </div>
+
+      <button
+        type="button"
+        class="close-btn"
+        (click)="closeModal()"
+        [disabled]="loading"
+        aria-label="Close">
+        &times;
+      </button>
+
+    </div>
+
+    <!-- Employee Form -->
+    <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+
+      <!-- Name -->
+      <div class="form-group">
+        <label for="name">Full Name</label>
+
+        <input
+          id="name"
+          type="text"
+          formControlName="name"
+          placeholder="Enter full name" />
+
+        <small *ngIf="employeeForm.get('name')?.touched &&
+                      employeeForm.get('name')?.hasError('required')">
+          Name is required.
+        </small>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label for="email">Email</label>
+
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="Enter email address" />
+
+        <small *ngIf="employeeForm.get('email')?.touched &&
+                      employeeForm.get('email')?.hasError('required')">
+          Email is required.
+        </small>
+
+        <small *ngIf="employeeForm.get('email')?.touched &&
+                      employeeForm.get('email')?.hasError('email')">
+          Enter a valid email address.
+        </small>
+      </div>
+
+      <!-- Department -->
+      <div class="form-group">
+        <label for="department">Department</label>
+
+        <input
+          id="department"
+          type="text"
+          formControlName="department"
+          placeholder="Enter department" />
+
+        <small *ngIf="employeeForm.get('department')?.touched &&
+                      employeeForm.get('department')?.hasError('required')">
+          Department is required.
+        </small>
+      </div>
+
+      <!-- Salary -->
+      <div class="form-group">
+        <label for="salary">Salary</label>
+
+        <input
+          id="salary"
+          type="number"
+          formControlName="salary"
+          placeholder="Enter salary" />
+
+        <small *ngIf="employeeForm.get('salary')?.touched &&
+                      employeeForm.get('salary')?.invalid">
+          Enter a valid salary.
+        </small>
+      </div>
+
+      <!-- Phone -->
+      <div class="form-group">
+        <label for="phone">Phone</label>
+
+        <input
+          id="phone"
+          type="tel"
+          formControlName="phone"
+          placeholder="Enter phone number" />
+
+        <small *ngIf="employeeForm.get('phone')?.touched &&
+                      employeeForm.get('phone')?.hasError('required')">
+          Phone is required.
+        </small>
+      </div>
+
+      <!-- Joining Date -->
+      <div class="form-group">
+        <label for="joining_date">Joining Date</label>
+
+        <input
+          id="joining_date"
+          type="date"
+          formControlName="joining_date" />
+
+        <small *ngIf="employeeForm.get('joining_date')?.touched &&
+                      employeeForm.get('joining_date')?.hasError('required')">
+          Joining date is required.
+        </small>
+      </div>
+
+      <!-- Status -->
+      <div class="form-group">
+        <label for="status">Status</label>
+
+        <select id="status" formControlName="status">
+          <option value="Active">Active</option>
+          <option value="Inactive">Inactive</option>
+        </select>
+      </div>
+
+      <!-- Messages -->
+      <p *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </p>
+
+      <!-- Buttons -->
+      <div class="form-actions">
+
+        <button
+          type="button"
+          class="cancel-btn"
+          (click)="closeModal()"
+          [disabled]="loading">
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="submit-btn"
+          [disabled]="loading || employeeForm.invalid">
+          {{ loading ? 'Saving...' : 'Add Employee' }}
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+</div>

@@ -1,0 +1,267 @@
+:host {
+  display: block;
+  height: 100vh;
+  overflow: hidden;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.admin-layout {
+  --sidebar-width: 280px;
+  height: 100vh;
+  overflow: hidden;
+  background: #f1f5fb;
+}
+
+.admin-layout.sidebar-collapsed {
+  --sidebar-width: 80px;
+}
+
+.sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  width: var(--sidebar-width);
+  overflow-x: hidden;
+  overflow-y: auto;
+  background: linear-gradient(180deg, #193047, #10273b);
+  color: #fff;
+  transition: width 0.25s ease;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 76px;
+  padding: 16px 22px;
+  border-bottom: 1px solid rgb(255 255 255 / 8%);
+}
+
+.brand-icon {
+  flex-shrink: 0;
+  font-size: 25px;
+}
+
+.brand-text {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 9px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  width: 100%;
+  min-height: 52px;
+  padding: 0 17px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #e2e8f0;
+  cursor: pointer;
+  font: inherit;
+  font-size: 14px;
+  text-align: left;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.nav-item:hover {
+  background: rgb(255 255 255 / 8%);
+  color: #fff;
+}
+
+.nav-item.active {
+  background: #1478f8;
+  color: #fff;
+}
+
+.nav-icon {
+  display: inline-flex;
+  flex: 0 0 17px;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+}
+
+.nav-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nav-divider {
+  height: 1px;
+  margin: 10px 12px;
+  background: rgb(255 255 255 / 10%);
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  min-width: 0;
+  margin-left: var(--sidebar-width);
+  transition: margin-left 0.25s ease;
+}
+
+.topbar {
+  position: relative;
+  z-index: 90;
+  display: flex;
+  flex: 0 0 74px;
+  align-items: center;
+  justify-content: space-between;
+  height: 74px;
+  padding: 0 28px;
+  border-bottom: 1px solid #e2e8f0;
+  background: #fff;
+}
+
+.menu-toggle {
+  border: 0;
+  background: transparent;
+  color: #475569;
+  cursor: pointer;
+  font-size: 27px;
+}
+
+.admin-menu {
+  position: relative;
+}
+
+.admin-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 5px;
+  border: 0;
+  background: transparent;
+  color: #172033;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.admin-avatar {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 50%;
+  background: #dbeafe;
+  color: #075fc7;
+  font-size: 20px;
+}
+
+.dropdown-arrow {
+  color: #64748b;
+}
+
+.admin-dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  z-index: 200;
+  width: 190px;
+  padding: 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 12px 30px rgb(15 23 42 / 12%);
+}
+
+.admin-dropdown button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 11px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: #334155;
+  cursor: pointer;
+  text-align: left;
+}
+
+.admin-dropdown button:hover {
+  background: #f1f5f9;
+}
+
+.admin-dropdown .dropdown-logout {
+  color: #dc2626;
+}
+
+.dropdown-divider {
+  height: 1px;
+  margin: 5px 0;
+  background: #e2e8f0;
+}
+
+.dashboard-content {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 5px 5px;
+}
+
+.sidebar-collapsed .brand {
+  justify-content: center;
+  padding-inline: 8px;
+}
+
+.sidebar-collapsed .brand-text,
+.sidebar-collapsed .nav-text {
+  display: none;
+}
+
+.sidebar-collapsed .nav-item {
+  justify-content: center;
+  gap: 0;
+  padding-inline: 8px;
+}
+
+@media (max-width: 768px) {
+  .admin-layout {
+    --sidebar-width: 80px;
+  }
+
+  .brand {
+    justify-content: center;
+    padding-inline: 8px;
+  }
+
+  .brand-text,
+  .nav-text {
+    display: none;
+  }
+
+  .nav-item {
+    justify-content: center;
+    gap: 0;
+    padding-inline: 8px;
+  }
+
+  .topbar {
+    padding-inline: 16px;
+  }
+
+  .dashboard-content {
+    padding: 18px 14px;
+  }
+}

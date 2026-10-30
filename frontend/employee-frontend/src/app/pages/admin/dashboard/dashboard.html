@@ -1,0 +1,104 @@
+
+<div class="dashboard-page">
+
+  <!-- Dashboard Heading -->
+  <div class="page-heading">
+
+    <div>
+      <h1>Admin Dashboard</h1>
+      <p>Manage employees, view details, and monitor statistics.</p>
+    </div>
+
+    <button
+      type="button"
+      class="add-employee-btn"
+      (click)="goToAddEmployee()">
+
+      <span>+</span>
+      Add Employee
+
+    </button>
+
+  </div>
+
+  <!-- Statistics Error -->
+  <div class="stats-error" *ngIf="statsError">
+
+    <p>{{ statsError }}</p>
+
+    <button
+      type="button"
+      (click)="loadDashboardStats()">
+      Retry
+    </button>
+
+  </div>
+
+  <!-- Dashboard Statistics -->
+  <div class="stats-grid">
+
+    <!-- Total Employees -->
+    <div class="stat-card total-card">
+
+      <div class="stat-icon">👥</div>
+
+      <div class="stat-info">
+        <h2>{{ totalEmployees }}</h2>
+        <p>Total Employees</p>
+      </div>
+
+    </div>
+
+    <!-- Active Employees -->
+    <div class="stat-card active-card">
+
+      <div class="stat-icon">✓</div>
+
+      <div class="stat-info">
+        <h2>{{ activeEmployees ?? 0 }}</h2>
+        <p>Active Employees</p>
+      </div>
+
+    </div>
+
+    <!-- Inactive Employees -->
+    <div class="stat-card inactive-card">
+
+      <div class="stat-icon">⊘</div>
+
+      <div class="stat-info">
+        <h2>{{ inactiveEmployees ?? 0 }}</h2>
+        <p>Inactive Employees</p>
+      </div>
+
+    </div>
+
+    <!-- Departments -->
+    <div class="stat-card department-card">
+
+      <div class="stat-icon">▣</div>
+
+      <div class="stat-info">
+        <h2>{{ totalDepartments }}</h2>
+        <p>Departments</p>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Employee Management -->
+  <section class="employee-section">
+
+    <app-employee-list></app-employee-list>
+
+  </section>
+
+  <!-- Add Employee Popup -->
+  <app-add-employee
+    *ngIf="showAddEmployeeModal"
+    (closed)="closeAddEmployeeModal()"
+    (employeeAdded)="onEmployeeAdded()">
+  </app-add-employee>
+
+</div>
